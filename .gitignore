@@ -11,3 +11,6 @@ build/
 *.ipr
 *.iws
 .idea/
+
+# FVM Version Cache
+.fvm/
