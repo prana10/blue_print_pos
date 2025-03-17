@@ -8,27 +8,32 @@ import android.util.Log
  */
 object Logger {
     private const val TAG = "BluePrintPos"
+    private var isDebug = false  
+    
+    fun setDebugMode(debug: Boolean) {  
+        isDebug = debug
+    }
     
     fun log(message: String, throwable: Throwable? = null) {
-        if (BuildConfig.DEBUG) {
+        if (isDebug) {
             Log.d(TAG, message, throwable)
         }
     }
 
     fun error(message: String, throwable: Throwable? = null) {
-        if (BuildConfig.DEBUG) {
+        if (isDebug) {
             Log.e(TAG, message, throwable)
         }
     }
 
     fun warning(message: String, throwable: Throwable? = null) {
-        if (BuildConfig.DEBUG) {
+        if (isDebug) {
             Log.w(TAG, message, throwable)
         }
     }
 
     fun info(message: String, throwable: Throwable? = null) {
-        if (BuildConfig.DEBUG) {
+        if (isDebug) {
             Log.i(TAG, message, throwable)
         }
     }
