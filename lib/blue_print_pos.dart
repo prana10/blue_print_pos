@@ -52,15 +52,11 @@ class BluePrintPos {
     selectedDevice = device;
     try {
       if (Platform.isAndroid) {
-        final blue_thermal.BluetoothDevice bluetoothDeviceAndroid =
-            blue_thermal.BluetoothDevice(
-                selectedDevice?.name ?? '', selectedDevice?.address ?? '');
+        final blue_thermal.BluetoothDevice bluetoothDeviceAndroid = blue_thermal.BluetoothDevice(selectedDevice?.name ?? '', selectedDevice?.address ?? '');
         await _bluetoothAndroid?.connect(bluetoothDeviceAndroid);
       } else if (Platform.isIOS) {
-        _bluetoothDeviceIOS =
-            BluetoothDevice.fromId(selectedDevice?.address ?? '');
-        final int deviceConnectedIndex = FlutterBluePlus.connectedDevices
-            .indexWhere((BluetoothDevice bluetoothDevice) {
+        _bluetoothDeviceIOS = BluetoothDevice.fromId(selectedDevice?.address ?? '');
+        final int deviceConnectedIndex = FlutterBluePlus.connectedDevices.indexWhere((BluetoothDevice bluetoothDevice) {
           return bluetoothDevice.remoteId == _bluetoothDeviceIOS?.remoteId;
         });
         if (deviceConnectedIndex < 0) {
@@ -180,14 +176,9 @@ class BluePrintPos {
       if (Platform.isAndroid) {
         _bluetoothAndroid?.writeBytes(Uint8List.fromList(byteBuffer));
       } else if (Platform.isIOS) {
-        final List<BluetoothService> bluetoothServices =
-            await _bluetoothDeviceIOS?.discoverServices() ??
-                <BluetoothService>[];
-        final BluetoothService bluetoothService = bluetoothServices
-            .firstWhere((BluetoothService service) => service.isPrimary);
-        final BluetoothCharacteristic characteristic = bluetoothService
-            .characteristics
-            .firstWhere((BluetoothCharacteristic c) => c.properties.write);
+        final List<BluetoothService> bluetoothServices = await _bluetoothDeviceIOS?.discoverServices() ?? <BluetoothService>[];
+        final BluetoothService bluetoothService = bluetoothServices.firstWhere((BluetoothService service) => service.isPrimary);
+        final BluetoothCharacteristic characteristic = bluetoothService.characteristics.firstWhere((BluetoothCharacteristic c) => c.properties.write);
 
         // Split data into chunks of 182 bytes
         const int chunkSize = 182;
@@ -254,8 +245,7 @@ class BluePrintPos {
           color: Color(0xFF000000),
         ),
       ).toImage(size);
-      final ByteData? byteData =
-          await image.toByteData(format: ImageByteFormat.png);
+      final ByteData? byteData = await image.toByteData(format: ImageByteFormat.png);
       assert(byteData != null);
       return byteData!.buffer.asUint8List();
     } on Exception catch (exception) {
@@ -274,8 +264,7 @@ class BluePrintPos {
     };
     Uint8List results = Uint8List.fromList(<int>[]);
     try {
-      results = await _channel.invokeMethod('contentToImage', arguments) ??
-          Uint8List.fromList(<int>[]);
+      results = await _channel.invokeMethod('contentToImage', arguments) ?? Uint8List.fromList(<int>[]);
     } on Exception catch (e) {
       log('[method:contentToImage]: $e');
       throw Exception('Error: $e');
